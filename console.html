@@ -1,47 +1,70 @@
 <!DOCTYPE html>
+
 <html>
 
 <head>
 
-<title>Lion SMP Console</title>
+<title>
+Lion SMP Console
+</title>
+
 
 <link rel="stylesheet" href="assets/style.css">
 
+<script src="assets/websocket.js"></script>
+
+
 </head>
+
 
 
 <body>
 
 
+<header>
+
+<h1>
+🦁 Server Console
+</h1>
+
+
+<nav>
+
+<a href="index.html">
+Dashboard
+</a>
+
+<a href="chat.html">
+Chat
+</a>
+
+
+</nav>
+
+
+</header>
+
+
+
+
+
 <div class="container">
-
-
-<h1>🦁 Server Console</h1>
-
-
-
-<div class="nav">
-
-<a href="index.html">Dashboard</a>
-<a href="console.html">Console</a>
-<a href="chat.html">Chat</a>
-
-</div>
-
 
 
 <div class="card">
 
 
-<input id="user" placeholder="Username">
+<input id="user"
+placeholder="Username">
+
 
 <input id="pass"
 type="password"
 placeholder="Password">
 
 
-<button onclick="login()">
-LOGIN
+<button onclick="doLogin()">
+Login
 </button>
 
 
@@ -49,28 +72,33 @@ LOGIN
 
 
 
-<div id="console">
 
+
+<div class="console"
+id="console">
 
 </div>
 
 
 
-<div class="card">
 
 
-<input id="command"
+<div class="card"
+id="adminBox"
+style="display:none">
+
+
+<input id="cmd"
 placeholder="Command">
 
 
-<button onclick="sendCommand()">
+<button onclick="command()">
 
 Execute
 
 </button>
 
 
-
 </div>
 
 
@@ -79,148 +107,104 @@ Execute
 
 
 
-<script src="assets/app.js"></script>
 
 
 <script>
 
 
-let role="viewer";
+function doLogin(){
 
 
+login(
 
-function addLog(text){
-
-
-document.getElementById("console")
-.innerHTML+=text+"<br>";
-
-
-}
-
-
-
-function login(){
-
-
-socket.send(JSON.stringify({
-
-type:"login",
-
-username:
 user.value,
 
-password:
 pass.value
 
+);
 
-}));
+
 
 }
 
 
 
-function sendCommand(){
+window.addEventListener(
+
+"mcwebbridge",
+
+(e)=>{
 
 
-if(role!=="admin"){
+let d=e.detail;
 
-alert("Admin only");
 
-return;
+
+if(
+d.type==="login_result"
+&&
+d.success
+){
+
+
+role=d.role;
+
+
+if(role==="admin")
+
+adminBox.style.display="block";
+
 
 }
 
 
 
-socket.send(JSON.stringify({
+if(d.type==="console"){
+
+
+console.innerHTML +=
+
+d.message
++
+"<br>";
+
+
+console.scrollTop=
+console.scrollHeight;
+
+
+}
+
+
+
+});
+
+
+
+
+
+function command(){
+
+
+sendPacket({
 
 type:"command",
 
 command:
-command.value
+cmd.value
 
 
-}));
-
-
-
-}
-
-
-
-connectWS();
-
-
-
-socket.onmessage=e=>{
-
-
-let data=JSON.parse(e.data);
-
-
-
-if(data.type==="login_result"){
-
-
-if(data.success){
-
-
-role=data.role;
-
-
-addLog(
-"Logged as "+role
-);
-
-
-}
-else{
-
-
-addLog(
-"Login failed"
-);
+});
 
 
 }
 
-
-}
-
-
-
-if(data.type==="console"){
-
-
-addLog(
-data.message
-);
-
-
-}
-
-
-
-};
-
-
-
-socket.onopen=()=>{
-
-
-socket.send(JSON.stringify({
-
-type:"console_subscribe"
-
-}));
-
-};
 
 
 </script>
 
 
 </body>
+
 
 </html>
