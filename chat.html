@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html>
+
+
+<head>
+
+
+<title>Lion SMP Chat</title>
+
+<link rel="stylesheet" href="assets/style.css">
+
+
+</head>
+
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>
+🦁 Lion SMP Chat
+</h1>
+
+
+
+<div class="nav">
+
+<a href="index.html">
+Dashboard
+</a>
+
+<a href="console.html">
+Console
+</a>
+
+
+<a href="chat.html">
+Chat
+</a>
+
+</div>
+
+
+
+<div id="chat">
+
+</div>
+
+
+
+<div class="card">
+
+
+<input id="name"
+placeholder="Your name">
+
+
+<input id="message"
+placeholder="Message">
+
+
+<button onclick="sendChat()">
+
+Send
+
+</button>
+
+
+
+</div>
+
+
+</div>
+
+
+
+<script src="assets/app.js"></script>
+
+
+<script>
+
+
+
+function addChat(t){
+
+
+chat.innerHTML+=t+"<br>";
+
+chat.scrollTop=chat.scrollHeight;
+
+
+}
+
+
+
+function sendChat(){
+
+
+socket.send(JSON.stringify({
+
+type:"chat",
+
+name:name.value,
+
+message:message.value
+
+
+}));
+
+
+
+message.value="";
+
+
+}
+
+
+
+connectWS();
+
+
+
+socket.onmessage=e=>{
+
+
+let data=JSON.parse(e.data);
+
+
+
+if(data.type==="chat"){
+
+
+addChat(
+"<b>"+
+data.player+
+"</b>: "+
+data.message
+);
+
+
+}
+
+
+
+if(data.type==="player_join"){
+
+
+addChat(
+"🟢 "+
+data.name+
+" joined"
+);
+
+
+}
+
+
+
+if(data.type==="player_leave"){
+
+
+addChat(
+"🔴 "+
+data.name+
+" left"
+);
+
+
+}
+
+
+
+};
+
+
+
+</script>
+
+
+
+</body>
+
+
+</html>
