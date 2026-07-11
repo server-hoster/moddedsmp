@@ -1,11 +1,18 @@
 <!DOCTYPE html>
+
 <html>
 
 <head>
 
-<title>Lion SMP Dashboard</title>
+<title>
+Lion SMP Dashboard
+</title>
+
 
 <link rel="stylesheet" href="assets/style.css">
+
+<script src="assets/websocket.js"></script>
+
 
 </head>
 
@@ -13,37 +20,52 @@
 <body>
 
 
+<header>
+
+<h1>
+🦁 Lion SMP Dashboard
+</h1>
+
+
+<nav>
+
+<a href="index.html">
+Dashboard
+</a>
+
+<a href="console.html">
+Console
+</a>
+
+<a href="chat.html">
+Chat
+</a>
+
+
+</nav>
+
+
+</header>
+
+
+
+
+
 <div class="container">
-
-
-<h1>🦁 Lion SMP Dashboard</h1>
-
-
-<div class="nav">
-
-<a href="index.html">Dashboard</a>
-<a href="console.html">Console</a>
-<a href="chat.html">Chat</a>
-
-</div>
-
 
 
 <div class="card">
 
 
-<h2>Status</h2>
-
-
-<p id="status">
-Connecting...
-</p>
+<h2>
+Server Status
+</h2>
 
 
 <p>
-CPU:
-<span id="cpu">
--
+Players:
+<span id="players">
+0
 </span>
 </p>
 
@@ -51,44 +73,36 @@ CPU:
 <p>
 RAM:
 <span id="ram">
--
+0
 </span>
+MB
 </p>
-
 
 
 <p>
 TPS:
 <span id="tps">
--
+20
 </span>
 </p>
-
-
-
-<p>
-Players:
-<span id="players">
--
-</span>
-</p>
-
 
 
 </div>
 
 
 
+
+
 <div class="card">
 
 
-<h2>Modpack</h2>
+<h2>
+Modpack
+</h2>
 
 
 <a href="#">
-
-Download Lion SMP Modpack
-
+Download Lion SMP Pack
 </a>
 
 
@@ -99,56 +113,45 @@ Download Lion SMP Modpack
 
 
 
-<script src="assets/app.js"></script>
 
 
 <script>
 
 
-connectWS(()=>{
+window.addEventListener(
+"mcwebbridge",
+(e)=>{
 
 
-socket.send(JSON.stringify({
-
-type:"status"
-
-}));
-
-});
+let d=e.detail;
 
 
 
-socket.onmessage=e=>{
+if(d.type==="status"){
 
 
-let data=JSON.parse(e.data);
+players.innerHTML=
+d.online;
 
 
-
-if(data.type==="status"){
-
-
-status.innerHTML="🟢 Online";
+ram.innerHTML=
+d.ramUsed;
 
 
-cpu.innerHTML=data.cpu+"%";
-
-ram.innerHTML=data.ram;
-
-tps.innerHTML=data.tps;
-
-players.innerHTML=data.players;
+tps.innerHTML=
+d.tps;
 
 
 }
 
 
 
-};
+});
 
 
 
 </script>
+
 
 
 </body>
