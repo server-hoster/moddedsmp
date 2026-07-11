@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Lion SMP Dashboard</title>
+
+<link rel="stylesheet" href="assets/style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>🦁 Lion SMP Dashboard</h1>
+
+
+<div class="nav">
+
+<a href="index.html">Dashboard</a>
+<a href="console.html">Console</a>
+<a href="chat.html">Chat</a>
+
+</div>
+
+
+
+<div class="card">
+
+
+<h2>Status</h2>
+
+
+<p id="status">
+Connecting...
+</p>
+
+
+<p>
+CPU:
+<span id="cpu">
+-
+</span>
+</p>
+
+
+<p>
+RAM:
+<span id="ram">
+-
+</span>
+</p>
+
+
+
+<p>
+TPS:
+<span id="tps">
+-
+</span>
+</p>
+
+
+
+<p>
+Players:
+<span id="players">
+-
+</span>
+</p>
+
+
+
+</div>
+
+
+
+<div class="card">
+
+
+<h2>Modpack</h2>
+
+
+<a href="#">
+
+Download Lion SMP Modpack
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<script src="assets/app.js"></script>
+
+
+<script>
+
+
+connectWS(()=>{
+
+
+socket.send(JSON.stringify({
+
+type:"status"
+
+}));
+
+});
+
+
+
+socket.onmessage=e=>{
+
+
+let data=JSON.parse(e.data);
+
+
+
+if(data.type==="status"){
+
+
+status.innerHTML="🟢 Online";
+
+
+cpu.innerHTML=data.cpu+"%";
+
+ram.innerHTML=data.ram;
+
+tps.innerHTML=data.tps;
+
+players.innerHTML=data.players;
+
+
+}
+
+
+
+};
+
+
+
+</script>
+
+
+</body>
+
+</html>
