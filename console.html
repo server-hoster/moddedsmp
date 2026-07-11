@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Lion SMP Console</title>
+
+<link rel="stylesheet" href="assets/style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>🦁 Server Console</h1>
+
+
+
+<div class="nav">
+
+<a href="index.html">Dashboard</a>
+<a href="console.html">Console</a>
+<a href="chat.html">Chat</a>
+
+</div>
+
+
+
+<div class="card">
+
+
+<input id="user" placeholder="Username">
+
+<input id="pass"
+type="password"
+placeholder="Password">
+
+
+<button onclick="login()">
+LOGIN
+</button>
+
+
+</div>
+
+
+
+<div id="console">
+
+
+</div>
+
+
+
+<div class="card">
+
+
+<input id="command"
+placeholder="Command">
+
+
+<button onclick="sendCommand()">
+
+Execute
+
+</button>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<script src="assets/app.js"></script>
+
+
+<script>
+
+
+let role="viewer";
+
+
+
+function addLog(text){
+
+
+document.getElementById("console")
+.innerHTML+=text+"<br>";
+
+
+}
+
+
+
+function login(){
+
+
+socket.send(JSON.stringify({
+
+type:"login",
+
+username:
+user.value,
+
+password:
+pass.value
+
+
+}));
+
+}
+
+
+
+function sendCommand(){
+
+
+if(role!=="admin"){
+
+alert("Admin only");
+
+return;
+
+}
+
+
+
+socket.send(JSON.stringify({
+
+type:"command",
+
+command:
+command.value
+
+
+}));
+
+
+
+}
+
+
+
+connectWS();
+
+
+
+socket.onmessage=e=>{
+
+
+let data=JSON.parse(e.data);
+
+
+
+if(data.type==="login_result"){
+
+
+if(data.success){
+
+
+role=data.role;
+
+
+addLog(
+"Logged as "+role
+);
+
+
+}
+else{
+
+
+addLog(
+"Login failed"
+);
+
+
+}
+
+
+}
+
+
+
+if(data.type==="console"){
+
+
+addLog(
+data.message
+);
+
+
+}
+
+
+
+};
+
+
+
+socket.onopen=()=>{
+
+
+socket.send(JSON.stringify({
+
+type:"console_subscribe"
+
+}));
+
+};
+
+
+</script>
+
+
+</body>
+
+</html>
