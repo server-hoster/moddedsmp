@@ -1,4 +1,4 @@
-const WS_URL = "ws://silenthost-inf.duckdns.org:8080";
+const WS_URL = "wss://silenthost-inf.duckdns.org";
 
 
 let socket = null;
