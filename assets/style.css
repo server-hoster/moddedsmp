@@ -1,0 +1,87 @@
+body {
+    background:#080808;
+    color:#00ff99;
+    font-family:Courier New, monospace;
+    margin:0;
+    padding:20px;
+}
+
+h1 {
+    text-align:center;
+    text-shadow:0 0 15px #00ff99;
+}
+
+.container {
+    max-width:1000px;
+    margin:auto;
+}
+
+
+.card {
+    background:#111;
+    border:1px solid #00ff99;
+    border-radius:10px;
+    padding:20px;
+    margin:15px 0;
+}
+
+
+button {
+    background:#00ff99;
+    color:black;
+    border:0;
+    padding:10px 20px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+
+input {
+    background:#000;
+    color:#00ff99;
+    border:1px solid #00ff99;
+    padding:10px;
+}
+
+
+#console,
+#chat {
+
+    height:60vh;
+    overflow:auto;
+    background:#000;
+    padding:15px;
+    border:1px solid #00ff99;
+
+}
+
+
+.nav {
+
+    text-align:center;
+    margin-bottom:20px;
+
+}
+
+
+.nav a {
+
+    color:#00ff99;
+    margin:15px;
+    text-decoration:none;
+
+}
+
+
+.online {
+
+    color:#00ff00;
+
+}
+
+
+.offline {
+
+    color:red;
+
+}
