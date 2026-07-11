@@ -2,64 +2,49 @@
 
 <html>
 
-
 <head>
 
+<title>
+Lion SMP Chat
+</title>
 
-<title>Lion SMP Chat</title>
 
 <link rel="stylesheet" href="assets/style.css">
+
+<script src="assets/websocket.js"></script>
 
 
 </head>
 
 
-
 <body>
 
 
-<div class="container">
-
+<header>
 
 <h1>
 🦁 Lion SMP Chat
 </h1>
 
+</header>
 
 
-<div class="nav">
-
-<a href="index.html">
-Dashboard
-</a>
-
-<a href="console.html">
-Console
-</a>
 
 
-<a href="chat.html">
-Chat
-</a>
+<div class="container">
+
+
+<div class="console"
+id="chat">
 
 </div>
-
-
-
-<div id="chat">
-
-</div>
-
-
-
-<div class="card">
 
 
 <input id="name"
 placeholder="Your name">
 
 
-<input id="message"
+<input id="msg"
 placeholder="Message">
 
 
@@ -70,119 +55,80 @@ Send
 </button>
 
 
-
-</div>
-
-
 </div>
 
 
 
-<script src="assets/app.js"></script>
 
 
 <script>
 
 
+window.addEventListener(
 
-function addChat(t){
+"mcwebbridge",
+
+(e)=>{
 
 
-chat.innerHTML+=t+"<br>";
+let d=e.detail;
 
-chat.scrollTop=chat.scrollHeight;
+
+
+if(d.type==="chat"){
+
+
+chat.innerHTML +=
+
+"<b>"
++
+d.name
++
+"</b>: "
++
+d.message
++
+"<br>";
+
 
 
 }
+
+
+
+});
+
+
+
+
 
 
 
 function sendChat(){
 
 
-socket.send(JSON.stringify({
+sendPacket({
 
 type:"chat",
 
 name:name.value,
 
-message:message.value
+message:msg.value
 
 
-}));
+});
 
 
-
-message.value="";
-
-
-}
-
-
-
-connectWS();
-
-
-
-socket.onmessage=e=>{
-
-
-let data=JSON.parse(e.data);
-
-
-
-if(data.type==="chat"){
-
-
-addChat(
-"<b>"+
-data.player+
-"</b>: "+
-data.message
-);
+msg.value="";
 
 
 }
-
-
-
-if(data.type==="player_join"){
-
-
-addChat(
-"🟢 "+
-data.name+
-" joined"
-);
-
-
-}
-
-
-
-if(data.type==="player_leave"){
-
-
-addChat(
-"🔴 "+
-data.name+
-" left"
-);
-
-
-}
-
-
-
-};
 
 
 
 </script>
 
 
-
 </body>
-
 
 </html>
